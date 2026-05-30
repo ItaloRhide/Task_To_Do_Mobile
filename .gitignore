@@ -1,0 +1,58 @@
+# Build outputs
+target/
+**/target/
+build/
+out/
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+/mvnw
+/mvnw.cmd
+
+# Logs
+*.log
+logs/
+
+# Runtime/config local
+.env
+.env.*
+!.env.example
+application-local.properties
+application-*.local.properties
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Java temporary files
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+# Node/frontend, if added later
+node_modules/
+dist/
+coverage/
+.angular/
+.npm/
+
+# Test/cache artifacts
+.pytest_cache/
+.cache/
+tmp/
+temp/
