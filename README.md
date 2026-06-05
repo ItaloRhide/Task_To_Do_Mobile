@@ -168,7 +168,6 @@ Configuracao padrao:
 ```text
 Banco: TASKDODB
 Usuario: postgres
-Senha: 123456
 Porta: 5432
 ```
 
