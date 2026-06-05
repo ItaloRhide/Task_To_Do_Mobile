@@ -2,7 +2,10 @@ package com.br.tasktodo.controller;
 
 import com.br.tasktodo.dto.CategoryDTO;
 import com.br.tasktodo.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +28,19 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryDTO create(@RequestBody CategoryDTO category) {
-        return categoryService.save(category);
+    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO category) {
+        CategoryDTO novaCategoria = categoryService.save(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
     }
 
     @PutMapping("/{id}")
-    public CategoryDTO update(@PathVariable Long id, @RequestBody CategoryDTO category) {
+    public CategoryDTO update(@PathVariable Long id, @Valid @RequestBody CategoryDTO category) {
         return categoryService.update(id, category);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

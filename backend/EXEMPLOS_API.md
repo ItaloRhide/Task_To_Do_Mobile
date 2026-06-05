@@ -41,6 +41,8 @@ curl -X PUT http://localhost:8080/api/categorias/1 \
 curl -X DELETE http://localhost:8080/api/categorias/1
 ```
 
+Se existirem tarefas vinculadas a categoria, a API retorna `409 Conflict`.
+
 ## Fornecedores
 
 ### Criar fornecedor
@@ -191,5 +193,24 @@ curl -X GET "http://localhost:8080/api/tasks/periodo?dataInicio=2026-06-01&dataF
 - `dataVencimento` e obrigatoria e nao pode ser anterior a data atual.
 - `prioridade` e obrigatoria e deve ficar entre 1 e 5.
 - `categoria.id` e obrigatorio para criar ou atualizar tarefas.
+- Categoria com tarefas vinculadas nao pode ser excluida.
+- `nome` da categoria e obrigatorio e tem limite de 100 caracteres.
+- `descricao` da categoria tem limite de 255 caracteres.
 - `fornecedores` e opcional, mas IDs informados precisam existir.
+- `nome` do fornecedor e obrigatorio e tem limite de 150 caracteres.
 - `cnpj` de fornecedor deve conter 14 digitos.
+
+## Formato de erro
+
+```json
+{
+  "timestamp": "2026-05-30T10:00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Dados invalidos",
+  "path": "/api/categorias",
+  "fields": {
+    "nome": "Nome da categoria e obrigatorio"
+  }
+}
+```

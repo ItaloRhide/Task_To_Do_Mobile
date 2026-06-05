@@ -1,11 +1,22 @@
 package com.br.tasktodo.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.util.Set;
 
 public class FornecedorDTO {
     private Long id;
+
+    @NotBlank(message = "Nome e obrigatorio")
+    @Size(max = 150, message = "Nome deve ter no maximo 150 caracteres")
     private String nome;
+
+    @NotBlank(message = "CNPJ e obrigatorio")
+    @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter exatamente 14 digitos")
     private String cnpj;
+
     private Set<TaskResumoDTO> tasks;
 
     public FornecedorDTO() {

@@ -13,6 +13,7 @@ out/
 # Logs
 *.log
 logs/
+comandos.txt
 
 # Runtime/config local
 .env

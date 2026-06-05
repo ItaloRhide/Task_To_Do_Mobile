@@ -42,4 +42,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Buscar tarefas por ID da categoria
     @Query("SELECT t FROM Task t WHERE t.categoria.id = :categoryId")
     List<Task> findByCategoriaId(@Param("categoryId") Long categoryId);
+
+    boolean existsByCategoriaId(Long categoryId);
 }

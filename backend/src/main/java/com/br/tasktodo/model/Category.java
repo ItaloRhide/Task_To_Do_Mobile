@@ -18,7 +18,7 @@ public class Category {
 
     private String descricao;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "categoria")
     @JsonIgnore
     private List<Task> tasks;
 

@@ -139,6 +139,12 @@ Representa a categoria de uma tarefa.
 - `nome`
 - `descricao`
 
+Regras principais:
+
+- Nome obrigatorio, maximo 100 caracteres.
+- Descricao com maximo de 255 caracteres.
+- Categoria com tarefas vinculadas nao pode ser excluida.
+
 ### Fornecedor
 
 Representa fornecedores vinculaveis a tarefas.
@@ -197,6 +203,30 @@ Regras principais:
 ## CORS
 
 O backend aceita requisicoes da origem `http://localhost:4200` para rotas `/api/**`.
+
+## Erros da API
+
+As respostas de erro seguem este formato:
+
+```json
+{
+  "timestamp": "2026-05-30T10:00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Dados invalidos",
+  "path": "/api/categorias",
+  "fields": {
+    "nome": "Nome da categoria e obrigatorio"
+  }
+}
+```
+
+Status principais:
+
+- `400 Bad Request`: payload, parametros ou validacoes invalidas.
+- `404 Not Found`: recurso inexistente.
+- `409 Conflict`: operacao bloqueada por regra de negocio ou restricao do banco.
+- `500 Internal Server Error`: erro inesperado.
 
 ## Exemplos
 
