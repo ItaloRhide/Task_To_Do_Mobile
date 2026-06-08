@@ -1,5 +1,6 @@
 package com.br.tasktodo.controller;
 
+import com.br.tasktodo.dto.DadosCnpjDTO;
 import com.br.tasktodo.dto.FornecedorDTO;
 import com.br.tasktodo.service.FornecedorService;
 import jakarta.validation.Valid;
@@ -27,6 +28,20 @@ public class FornecedorController {
     public ResponseEntity<FornecedorDTO> buscarFornecedorPorId(@PathVariable Long id) {
         FornecedorDTO fornecedor = fornecedorService.buscarPorId(id);
         return ResponseEntity.ok(fornecedor);
+    }
+
+    @GetMapping("/consulta-cnpj/{cnpj}")
+    public ResponseEntity<?> consultarCnpj(@PathVariable String cnpj) {
+        try {
+            if (cnpj == null || cnpj.length() != 14 || !cnpj.matches("\\d+")) {
+                return ResponseEntity.badRequest().body("CNPJ invalido. Informe 14 digitos numericos.");
+            }
+            DadosCnpjDTO dados = fornecedorService.consultarCnpj(cnpj);
+            return ResponseEntity.ok(dados);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("Nao foi possivel consultar o CNPJ. Tente novamente mais tarde.");
+        }
     }
 
     @PostMapping

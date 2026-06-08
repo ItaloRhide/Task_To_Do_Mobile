@@ -59,6 +59,24 @@ export default function createStyles(theme) {
       paddingHorizontal: 14,
       fontSize: 14,
     },
+    dateInput: {
+      minHeight: 48,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surfaceMuted,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 14,
+    },
+    dateText: {
+      color: colors.text,
+      fontSize: 14,
+    },
+    datePlaceholder: {
+      color: colors.muted,
+    },
     textArea: {
       minHeight: 96,
       paddingTop: 12,

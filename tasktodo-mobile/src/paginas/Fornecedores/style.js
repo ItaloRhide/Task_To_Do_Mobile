@@ -12,6 +12,19 @@ export default function createStyles(theme) {
       flex: 1,
       paddingHorizontal: 16,
     },
+    searchRow: {
+      flexDirection: 'row',
+      gap: 10,
+      marginBottom: 12,
+    },
+    addButton: {
+      width: 46,
+      height: 46,
+      borderRadius: 8,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     primaryButton: {
       height: 46,
       borderRadius: 8,
@@ -20,6 +33,7 @@ export default function createStyles(theme) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8,
+      marginTop: 8,
       marginBottom: 12,
     },
     disabledButton: {
@@ -122,13 +136,13 @@ export default function createStyles(theme) {
       fontWeight: '800',
     },
     fieldGroup: {
-      marginBottom: 12,
+      marginBottom: 10,
     },
     label: {
       color: colors.text,
       fontSize: 12,
       fontWeight: '800',
-      marginBottom: 6,
+      marginBottom: 5,
     },
     input: {
       minHeight: 44,
@@ -139,6 +153,17 @@ export default function createStyles(theme) {
       color: colors.text,
       fontSize: 14,
       paddingHorizontal: 12,
+    },
+    inputDisabled: {
+      opacity: 0.6,
+    },
+    row: {
+      flexDirection: 'row',
+      gap: 10,
+    },
+    halfField: {
+      flex: 1,
+      marginBottom: 10,
     },
     feedbackBox: {
       borderRadius: 8,
@@ -171,6 +196,11 @@ export default function createStyles(theme) {
       fontSize: 13,
       fontWeight: '700',
       textAlign: 'center',
+    },
+    addressDivider: {
+      height: 1,
+      backgroundColor: colors.border,
+      marginVertical: 12,
     },
   });
 }

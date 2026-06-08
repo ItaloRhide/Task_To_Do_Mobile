@@ -21,6 +21,11 @@ export default function createStyles(theme) {
       alignItems: 'center',
       marginBottom: 32,
     },
+    logo: {
+      width: 100,
+      height: 100,
+      marginBottom: 16,
+    },
     logoCircle: {
       width: 72,
       height: 72,

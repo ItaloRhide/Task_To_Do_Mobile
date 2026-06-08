@@ -17,6 +17,21 @@ public class FornecedorDTO {
     @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter exatamente 14 digitos")
     private String cnpj;
 
+    @Size(max = 255, message = "Logradouro deve ter no maximo 255 caracteres")
+    private String logradouro;
+
+    @Size(max = 100, message = "Bairro deve ter no maximo 100 caracteres")
+    private String bairro;
+
+    @Size(max = 100, message = "Cidade deve ter no maximo 100 caracteres")
+    private String cidade;
+
+    @Size(min = 2, max = 2, message = "UF deve ter 2 caracteres")
+    private String uf;
+
+    @Pattern(regexp = "\\d{8}", message = "CEP deve conter 8 digitos")
+    private String cep;
+
     private Set<TaskResumoDTO> tasks;
 
     public FornecedorDTO() {
@@ -28,7 +43,6 @@ public class FornecedorDTO {
         this.cnpj = cnpj;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -51,6 +65,46 @@ public class FornecedorDTO {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
     public Set<TaskResumoDTO> getTasks() {

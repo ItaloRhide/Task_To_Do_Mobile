@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome } from '@expo/vector-icons';
 
 import SectionCard from '../../componentes/SectionCard';
@@ -24,6 +25,19 @@ const initialForm = {
   dataVencimento: '',
   concluida: false,
 };
+
+function formatDateToIso(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function parseIsoToDate(iso) {
+  if (!iso) return new Date();
+  const [y, m, d] = iso.split('-');
+  return new Date(Number(y), Number(m) - 1, Number(d));
+}
 
 function isValidIsoDate(value) {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -39,6 +53,7 @@ export default function FormularioTarefa({ navigation, route, theme }) {
   const [categoriaId, setCategoriaId] = useState(null);
   const [fornecedorIds, setFornecedorIds] = useState([]);
   const [prioridade, setPrioridade] = useState(3);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -204,14 +219,29 @@ export default function FormularioTarefa({ navigation, route, theme }) {
 
               <View style={styles.fieldGroup}>
                 <Text style={styles.label}>Data de vencimento</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="2026-06-15"
-                  placeholderTextColor={theme.colors.muted}
-                  value={form.dataVencimento}
-                  onChangeText={(value) => updateField('dataVencimento', value)}
-                  maxLength={10}
-                />
+                <TouchableOpacity
+                  style={styles.dateInput}
+                  onPress={() => setShowDatePicker(true)}
+                  activeOpacity={0.8}
+                >
+                  <FontAwesome name="calendar" size={14} color={theme.colors.muted} />
+                  <Text style={[styles.dateText, form.dataVencimento ? {} : styles.datePlaceholder]}>
+                    {form.dataVencimento || 'Selecionar data'}
+                  </Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={parseIsoToDate(form.dataVencimento)}
+                    mode="date"
+                    display="default"
+                    onChange={(event, selectedDate) => {
+                      setShowDatePicker(false);
+                      if (event.type === 'set' && selectedDate) {
+                        updateField('dataVencimento', formatDateToIso(selectedDate));
+                      }
+                    }}
+                  />
+                )}
               </View>
 
               <Text style={styles.label}>Categoria</Text>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -69,9 +70,11 @@ export default function Login() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.logoSection}>
-            <View style={[styles.logoCircle, { backgroundColor: theme.colors.primarySoft }]}>
-              <FontAwesome name="tasks" size={32} color={theme.colors.primary} />
-            </View>
+            <Image
+              source={require('../../../assets/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
             <Text style={[styles.appName, { color: theme.colors.text }]}>Task To Do</Text>
             <Text style={[styles.appSubtitle, { color: theme.colors.muted }]}>
               Faca login para continuar
