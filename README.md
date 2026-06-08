@@ -1,195 +1,196 @@
 <div align="center">
   <img src="tasktodo-mobile/assets/logo.png" alt="Task To Do" width="140" />
 
-  <h1>Task To Do</h1>
-  <p>Aplicacao para gerenciamento de tarefas, categorias e fornecedores.</p>
+  <h1>📋 Task To Do</h1>
+  <p>Gerenciamento de tarefas, categorias e fornecedores</p>
 </div>
 
-## Ideia do projeto
+<div align="center">
 
-O Task To Do e uma aplicacao de organizacao de tarefas criada para o contexto de desenvolvimento mobile. O sistema permite registrar tarefas, classifica-las por categoria, definir prioridade e relacionar fornecedores quando necessario.
+![Java 17](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Expo](https://img.shields.io/badge/Expo_SDK_56-000020?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-O projeto e dividido em duas partes principais:
+</div>
 
-- `backend`: API REST em Java com Spring Boot.
-- `tasktodo-mobile`: aplicativo mobile em Expo e React Native.
+---
 
-## Funcoes
+## 💡 Sobre o projeto
 
-- Cadastro, listagem, edicao e exclusao de tarefas.
-- Controle de tarefas concluidas e pendentes.
-- Definicao de prioridade da tarefa.
-- Organizacao por categorias.
-- Cadastro e gerenciamento de fornecedores.
-- Vinculo de fornecedores a tarefas.
-- Consultas por status, prioridade, categoria, titulo e vencimento.
+O **Task To Do** é uma aplicação de organização de tarefas criada para o contexto de desenvolvimento mobile. O sistema permite registrar tarefas, classificá-las por categoria, definir prioridade e relacionar fornecedores quando necessário.
 
-## Tecnologias
+O projeto é dividido em duas partes principais:
+
+- **`backend`** — API REST em Java com Spring Boot
+- **`tasktodo-mobile`** — aplicativo mobile em Expo e React Native
+
+---
+
+## ✨ Funcionalidades
+
+- ✅ Cadastro, listagem, edição e exclusão de tarefas
+- 📌 Controle de tarefas concluídas e pendentes
+- 🔥 Definição de prioridade da tarefa
+- 📂 Organização por categorias
+- 🏢 Cadastro e gerenciamento de fornecedores
+- 🔗 Vínculo de fornecedores a tarefas
+- 🔍 Consultas por status, prioridade, categoria, título e vencimento
+- 🔐 Autenticação JWT
+
+---
+
+## 🛠️ Tecnologias
 
 ### Backend
 
-- Java 17
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Bean Validation
-- PostgreSQL
-- Maven
+| Tecnologia | Versão |
+|---|---|
+| Java | 17 |
+| Spring Boot | - |
+| Spring Web | - |
+| Spring Data JPA | - |
+| Spring Security + JWT | - |
+| Bean Validation | - |
+| PostgreSQL | - |
+| Maven | - |
 
 ### Mobile
 
-- Expo SDK 56
-- React Native
-- React Navigation
-- Axios
-- Expo Vector Icons
+| Tecnologia | Versão |
+|---|---|
+| Expo SDK | 56 |
+| React Native | - |
+| React Navigation | - |
+| Axios | - |
+| Expo Vector Icons | - |
 
-## Arquitetura
+---
 
-```text
+## 📂 Estrutura do projeto
+
+```
 .
-+-- backend/
-|   +-- src/main/java/com/br/tasktodo/
-|   |   +-- config/
-|   |   +-- controller/
-|   |   +-- dto/
-|   |   +-- exception/
-|   |   +-- model/
-|   |   +-- repository/
-|   |   +-- service/
-|   +-- database/
-|
-+-- tasktodo-mobile/
-    +-- App.js
-    +-- src/
-        +-- componentes/
-        +-- dados/
-        +-- paginas/
-        +-- servicos/
-        +-- tema/
+├── backend/
+│   └── src/main/java/com/br/tasktodo/
+│       ├── config/        # Inicialização e configurações
+│       ├── controller/    # Rotas REST
+│       ├── dto/           # Objetos de transferência
+│       ├── exception/     # Tratamento de erros
+│       ├── model/         # Entidades do banco
+│       ├── repository/    # Acesso a dados
+│       └── service/       # Regras de negócio
+│
+└── tasktodo-mobile/
+    ├── App.js
+    └── src/
+        ├── componentes/   # Componentes reutilizáveis
+        ├── dados/         # Dados estáticos
+        ├── paginas/       # Telas do app
+        ├── servicos/      # Chamadas HTTP e utilitários
+        └── tema/          # Tema escuro
 ```
 
-O backend segue uma organizacao em camadas:
+---
 
-- `controller`: rotas REST.
-- `service`: regras de negocio.
-- `repository`: acesso ao banco.
-- `model`: entidades persistidas.
-- `dto`: objetos de transferencia de dados.
-- `exception`: tratamento padronizado de erros.
-
-O app mobile segue a base usada nas aulas, com telas separadas por pagina, estilos por tela, componentes reutilizaveis e um servico central para chamadas HTTP.
-
-## Entidades principais
+## 📦 Entidades
 
 ### Task
 
-Representa uma tarefa.
-
-Campos principais:
-
-- `id`
-- `titulo`
-- `descricao`
-- `dataVencimento`
-- `concluida`
-- `prioridade`
-- `categoria`
-- `fornecedores`
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | Long | Identificador único |
+| `titulo` | String | Título da tarefa |
+| `descricao` | String | Descrição detalhada |
+| `dataVencimento` | LocalDate | Data de vencimento |
+| `concluida` | Boolean | Status de conclusão |
+| `prioridade` | Integer | Nível de prioridade |
+| `categoria` | Category | Categoria vinculada |
+| `fornecedores` | Set<Fornecedor> | Fornecedores vinculados |
 
 ### Category
 
-Representa uma categoria usada para organizar tarefas.
-
-Campos principais:
-
-- `id`
-- `nome`
-- `descricao`
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | Long | Identificador único |
+| `nome` | String | Nome da categoria |
+| `descricao` | String | Descrição da categoria |
 
 ### Fornecedor
 
-Representa um fornecedor que pode ser vinculado a uma tarefa.
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | Long | Identificador único |
+| `nome` | String | Nome do fornecedor |
+| `cnpj` | String | CNPJ (14 dígitos) |
 
-Campos principais:
+---
 
-- `id`
-- `nome`
-- `cnpj`
-- `tasks`
+## 📡 Endpoints da API
 
-## Endpoints principais
-
-Base da API:
-
-```text
-http://localhost:8080/api
-```
+Base: `http://localhost:8080/api`
 
 ### Tarefas
 
-- `GET /tasks`
-- `GET /tasks/{id}`
-- `POST /tasks`
-- `PUT /tasks/{id}`
-- `DELETE /tasks/{id}`
-- `PUT /tasks/{id}/concluir`
-- `GET /tasks/categoria/{categoryId}`
-- `GET /tasks/status/{concluida}`
-- `GET /tasks/prioridade/{prioridade}`
-- `GET /tasks/buscar?titulo={titulo}`
-- `GET /tasks/vencimento/hoje`
-- `GET /tasks/vencidas`
-- `GET /tasks/pendentes`
-- `GET /tasks/periodo?dataInicio={yyyy-MM-dd}&dataFim={yyyy-MM-dd}`
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/tasks` | Lista todas |
+| `GET` | `/tasks/{id}` | Busca por ID |
+| `POST` | `/tasks` | Cria nova |
+| `PUT` | `/tasks/{id}` | Atualiza |
+| `DELETE` | `/tasks/{id}` | Remove |
+| `PUT` | `/tasks/{id}/concluir` | Alterna conclusão |
+| `GET` | `/tasks/categoria/{id}` | Filtra por categoria |
+| `GET` | `/tasks/status/{concluida}` | Filtra por status |
+| `GET` | `/tasks/prioridade/{prioridade}` | Filtra por prioridade |
+| `GET` | `/tasks/buscar?titulo={titulo}` | Busca por título |
+| `GET` | `/tasks/vencimento/hoje` | Vencendo hoje |
+| `GET` | `/tasks/vencidas` | Tarefas vencidas |
+| `GET` | `/tasks/pendentes` | Tarefas pendentes |
+| `GET` | `/tasks/periodo?dataInicio=&dataFim=` | Filtra por período |
 
 ### Categorias
 
-- `GET /categorias`
-- `GET /categorias/{id}`
-- `POST /categorias`
-- `PUT /categorias/{id}`
-- `DELETE /categorias/{id}`
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/categorias` | Lista todas |
+| `GET` | `/categorias/{id}` | Busca por ID |
+| `POST` | `/categorias` | Cria nova |
+| `PUT` | `/categorias/{id}` | Atualiza |
+| `DELETE` | `/categorias/{id}` | Remove |
 
 ### Fornecedores
 
-- `GET /fornecedores`
-- `GET /fornecedores/{id}`
-- `POST /fornecedores`
-- `PUT /fornecedores/{id}`
-- `DELETE /fornecedores/{id}`
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/fornecedores` | Lista todos |
+| `GET` | `/fornecedores/{id}` | Busca por ID |
+| `POST` | `/fornecedores` | Cria novo |
+| `PUT` | `/fornecedores/{id}` | Atualiza |
+| `DELETE` | `/fornecedores/{id}` | Remove |
 
-## Banco de dados
+---
 
-O backend usa PostgreSQL.
+## 🗄️ Banco de dados
 
-<<<<<<< HEAD
-Crie o banco antes de iniciar:
-=======
-Configuracao padrao:
-
-```text
-Banco: TASKDODB
-Usuario: postgres
-Porta: 5432
-```
-
-Comando para criar o banco:
->>>>>>> c89637adb109d946ecf9ae609b42830f2db77843
+O backend utiliza PostgreSQL. Crie o banco antes de iniciar:
 
 ```sql
 CREATE DATABASE "TASKDODB";
 ```
 
-As configuracoes de conexao sao definidas via variaveis de ambiente (ou valores padrao no `application.properties`):
+As configurações de conexão são definidas via variáveis de ambiente (ou valores padrão no `application.properties`):
 
-| Variavel | Descricao | Padrao |
+| Variável | Descrição | Padrão |
 |---|---|---|
-| `DB_URL` | URL do banco | `jdbc:postgresql://localhost:5432/TASKDODB` |
-| `DB_USERNAME` | Usuario | `postgres` |
-| `DB_PASSWORD` | Senha | (definir via ambiente) |
+| `DB_URL` | URL de conexão | `jdbc:postgresql://localhost:5432/TASKDODB` |
+| `DB_USERNAME` | Usuário | `postgres` |
+| `DB_PASSWORD` | Senha | *(definir via ambiente)* |
 
-## Como executar
+---
+
+## 🚀 Como executar
 
 ### Backend
 
@@ -198,11 +199,7 @@ cd backend
 .\mvnw.cmd spring-boot:run
 ```
 
-A API ficara disponivel em:
-
-```text
-http://localhost:8080
-```
+A API ficará disponível em `http://localhost:8080`.
 
 ### Mobile
 
@@ -212,23 +209,29 @@ npm install
 npx expo start --clear
 ```
 
-Para usar uma porta especifica:
+Para usar uma porta específica:
 
 ```powershell
 npx expo start --port 8082 --clear
 ```
 
-## Icone do projeto
+---
 
-O icone principal do projeto fica em:
+## 📱 Ícone do projeto
 
-```text
-tasktodo-mobile/assets/logo.png
-```
+O ícone principal fica em `tasktodo-mobile/assets/logo.png`, usado no cabeçalho deste README e como ícone do app Expo.
 
-Esse arquivo e usado no cabecalho deste README e tambem como icone do app Expo.
+---
 
-## Observacoes
+## 📌 Observações
 
-- Em celular fisico, o app mobile nao deve usar `localhost` para acessar o backend. Use o IP da maquina na rede local.
-- Exemplos completos de chamadas da API estao em `backend/EXEMPLOS_API.md`.
+- Em celular físico, o app mobile não deve usar `localhost` para acessar o backend. Use o IP da máquina na rede local ou configure `adb reverse tcp:8080 tcp:8080`.
+- Exemplos completos de chamadas da API estão em `backend/EXEMPLOS_API.md`.
+
+---
+
+<div align="center">
+
+*"Não é sobre ter tempo. É sobre ter prioridades."*
+
+</div>
