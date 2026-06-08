@@ -163,7 +163,19 @@ http://localhost:8080/api
 
 O backend usa PostgreSQL.
 
+<<<<<<< HEAD
 Crie o banco antes de iniciar:
+=======
+Configuracao padrao:
+
+```text
+Banco: TASKDODB
+Usuario: postgres
+Porta: 5432
+```
+
+Comando para criar o banco:
+>>>>>>> c89637adb109d946ecf9ae609b42830f2db77843
 
 ```sql
 CREATE DATABASE "TASKDODB";
