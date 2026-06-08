@@ -1,5 +1,75 @@
 import { StyleSheet } from 'react-native';
 
+export const alertStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  dialog: {
+    width: '100%',
+    maxWidth: 380,
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 1,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconBoxDanger: {
+    backgroundColor: '#FEE2E2',
+  },
+  iconBoxWarning: {
+    backgroundColor: '#FEF3C7',
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: '800',
+    flex: 1,
+  },
+  message: {
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 20,
+    paddingLeft: 2,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 10,
+  },
+  dismissButton: {
+    minWidth: 100,
+    height: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 18,
+  },
+  dismissButtonDanger: {},
+  dismissText: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  dismissTextDanger: {},
+});
+
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',

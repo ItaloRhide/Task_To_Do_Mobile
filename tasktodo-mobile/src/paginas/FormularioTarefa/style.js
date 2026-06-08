@@ -148,9 +148,52 @@ export default function createStyles(theme) {
       justifyContent: 'center',
       gap: 8,
     },
+    disabledButton: {
+      opacity: 0.7,
+    },
     primaryButtonText: {
       color: '#FFFFFF',
       fontWeight: '800',
+    },
+    helperText: {
+      color: colors.muted,
+      fontSize: 12,
+      fontWeight: '700',
+      lineHeight: 17,
+    },
+    loadingBox: {
+      minHeight: 180,
+      borderRadius: 8,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 10,
+      padding: 18,
+    },
+    loadingText: {
+      color: colors.muted,
+      fontSize: 13,
+      fontWeight: '700',
+    },
+    feedbackBox: {
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.danger,
+      backgroundColor: colors.surface,
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: 8,
+      padding: 12,
+      marginBottom: 12,
+    },
+    feedbackText: {
+      flex: 1,
+      color: colors.danger,
+      fontSize: 12,
+      fontWeight: '700',
+      lineHeight: 17,
     },
   });
 }

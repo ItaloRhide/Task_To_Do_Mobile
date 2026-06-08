@@ -163,20 +163,19 @@ http://localhost:8080/api
 
 O backend usa PostgreSQL.
 
-Configuracao padrao:
-
-```text
-Banco: TASKDODB
-Usuario: postgres
-Senha: 123456
-Porta: 5432
-```
-
-Comando para criar o banco:
+Crie o banco antes de iniciar:
 
 ```sql
 CREATE DATABASE "TASKDODB";
 ```
+
+As configuracoes de conexao sao definidas via variaveis de ambiente (ou valores padrao no `application.properties`):
+
+| Variavel | Descricao | Padrao |
+|---|---|---|
+| `DB_URL` | URL do banco | `jdbc:postgresql://localhost:5432/TASKDODB` |
+| `DB_USERNAME` | Usuario | `postgres` |
+| `DB_PASSWORD` | Senha | (definir via ambiente) |
 
 ## Como executar
 

@@ -114,6 +114,12 @@ export default function createStyles(theme) {
       fontSize: 12,
       fontWeight: '700',
     },
+    actionsRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+      marginTop: 12,
+    },
     outlineButton: {
       minHeight: 34,
       borderRadius: 8,
@@ -128,6 +134,50 @@ export default function createStyles(theme) {
       color: colors.primary,
       fontSize: 12,
       fontWeight: '700',
+    },
+    dangerButton: {
+      borderColor: colors.danger,
+    },
+    dangerButtonText: {
+      color: colors.danger,
+      fontSize: 12,
+      fontWeight: '700',
+    },
+    feedbackBox: {
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.danger,
+      backgroundColor: colors.surface,
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: 8,
+      padding: 12,
+      marginBottom: 8,
+    },
+    feedbackText: {
+      flex: 1,
+      color: colors.danger,
+      fontSize: 12,
+      fontWeight: '700',
+      lineHeight: 17,
+    },
+    statCard: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 16,
+      borderRadius: 12,
+      gap: 4,
+    },
+    statValue: {
+      fontSize: 26,
+      fontWeight: '900',
+    },
+    statLabel: {
+      fontSize: 11,
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
     },
     emptyBox: {
       alignItems: 'center',

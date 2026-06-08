@@ -1,5 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -12,15 +14,137 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 
 import SectionCard from '../../componentes/SectionCard';
-import { categoriasMock, fornecedoresMock } from '../../dados/mockData';
+import api from '../../servicos/api';
+import extractErrorMessage from '../../servicos/errorMessage';
 import createStyles from './style';
+
+const initialForm = {
+  titulo: '',
+  descricao: '',
+  dataVencimento: '',
+  concluida: false,
+};
+
+function isValidIsoDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
 
 export default function FormularioTarefa({ navigation, route, theme }) {
   const styles = useMemo(() => createStyles(theme), [theme]);
-  const isEditing = Boolean(route.params?.id);
-  const [categoriaId, setCategoriaId] = useState(categoriasMock[0].id);
+  const taskId = route.params?.id;
+  const isEditing = Boolean(taskId);
+  const [form, setForm] = useState(initialForm);
+  const [categorias, setCategorias] = useState([]);
+  const [fornecedores, setFornecedores] = useState([]);
+  const [categoriaId, setCategoriaId] = useState(null);
+  const [fornecedorIds, setFornecedorIds] = useState([]);
   const [prioridade, setPrioridade] = useState(3);
-  const [fornecedorId, setFornecedorId] = useState(fornecedoresMock[0].id);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const carregarDados = useCallback(async () => {
+    try {
+      setError('');
+      setLoading(true);
+
+      const requests = [
+        api.get('/categorias'),
+        api.get('/fornecedores'),
+      ];
+
+      if (isEditing) {
+        requests.push(api.get(`/tasks/${taskId}`));
+      }
+
+      const [categoriasResponse, fornecedoresResponse, taskResponse] = await Promise.all(requests);
+      const categoriasData = categoriasResponse.data;
+      const fornecedoresData = fornecedoresResponse.data;
+
+      setCategorias(categoriasData);
+      setFornecedores(fornecedoresData);
+
+      if (taskResponse?.data) {
+        const task = taskResponse.data;
+
+        setForm({
+          titulo: task.titulo || '',
+          descricao: task.descricao || '',
+          dataVencimento: task.dataVencimento || '',
+          concluida: Boolean(task.concluida),
+        });
+        setPrioridade(task.prioridade || 3);
+        setCategoriaId(task.categoria?.id || categoriasData[0]?.id || null);
+        setFornecedorIds((task.fornecedores || []).map((fornecedor) => fornecedor.id));
+      } else {
+        setCategoriaId(categoriasData[0]?.id || null);
+      }
+    } catch (err) {
+      setError(extractErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
+  }, [isEditing, taskId]);
+
+  useEffect(() => {
+    carregarDados();
+  }, [carregarDados]);
+
+  function updateField(field, value) {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
+
+  function toggleFornecedor(id) {
+    setFornecedorIds((current) => {
+      if (current.includes(id)) {
+        return current.filter((item) => item !== id);
+      }
+
+      return [...current, id];
+    });
+  }
+
+  async function salvarTarefa() {
+    const payload = {
+      titulo: form.titulo.trim(),
+      descricao: form.descricao.trim(),
+      dataVencimento: form.dataVencimento.trim(),
+      prioridade,
+      concluida: form.concluida,
+      categoria: categoriaId ? { id: categoriaId } : null,
+      fornecedores: fornecedorIds.map((id) => ({ id })),
+    };
+
+    if (!payload.titulo || !payload.dataVencimento || !payload.categoria) {
+      Alert.alert('Dados invalidos', 'Informe titulo, data de vencimento e categoria.');
+      return;
+    }
+
+    if (!isValidIsoDate(payload.dataVencimento)) {
+      Alert.alert('Data invalida', 'Use o formato AAAA-MM-DD, por exemplo 2026-06-15.');
+      return;
+    }
+
+    try {
+      setSaving(true);
+      setError('');
+
+      if (isEditing) {
+        await api.put(`/tasks/${taskId}`, payload);
+      } else {
+        await api.post('/tasks', payload);
+      }
+
+      navigation.goBack();
+    } catch (err) {
+      Alert.alert('Erro ao salvar', 'Nao foi possivel salvar a tarefa. Tente novamente.');
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -35,87 +159,137 @@ export default function FormularioTarefa({ navigation, route, theme }) {
             </View>
             <View>
               <Text style={styles.pageTitle}>{isEditing ? 'Editar tarefa' : 'Nova tarefa'}</Text>
-              <Text style={styles.pageSubtitle}>Base visual preparada para integrar com a API.</Text>
+              <Text style={styles.pageSubtitle}>Preencha os dados para salvar na API.</Text>
             </View>
           </View>
 
-          <SectionCard theme={theme}>
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Titulo</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ex: Estudar React Native"
-                placeholderTextColor={theme.colors.muted}
-              />
+          {error ? (
+            <View style={styles.feedbackBox}>
+              <FontAwesome name="exclamation-circle" size={14} color={theme.colors.danger} />
+              <Text style={styles.feedbackText}>{error}</Text>
             </View>
+          ) : null}
 
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Descricao</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Detalhes da tarefa"
-                placeholderTextColor={theme.colors.muted}
-                multiline
-              />
+          {loading ? (
+            <View style={styles.loadingBox}>
+              <ActivityIndicator color={theme.colors.primary} />
+              <Text style={styles.loadingText}>Carregando dados...</Text>
             </View>
+          ) : (
+            <SectionCard theme={theme}>
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>Titulo</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ex: Estudar React Native"
+                  placeholderTextColor={theme.colors.muted}
+                  value={form.titulo}
+                  onChangeText={(value) => updateField('titulo', value)}
+                  maxLength={100}
+                />
+              </View>
 
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Data de vencimento</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="2026-06-15"
-                placeholderTextColor={theme.colors.muted}
-              />
-            </View>
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>Descricao</Text>
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  placeholder="Detalhes da tarefa"
+                  placeholderTextColor={theme.colors.muted}
+                  value={form.descricao}
+                  onChangeText={(value) => updateField('descricao', value)}
+                  maxLength={500}
+                  multiline
+                />
+              </View>
 
-            <Text style={styles.label}>Categoria</Text>
-            <View style={styles.optionGrid}>
-              {categoriasMock.map((categoria) => (
-                <TouchableOpacity
-                  key={categoria.id}
-                  style={[styles.optionButton, categoriaId === categoria.id && styles.optionButtonActive]}
-                  onPress={() => setCategoriaId(categoria.id)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.optionText, categoriaId === categoria.id && styles.optionTextActive]}>
-                    {categoria.nome}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>Data de vencimento</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="2026-06-15"
+                  placeholderTextColor={theme.colors.muted}
+                  value={form.dataVencimento}
+                  onChangeText={(value) => updateField('dataVencimento', value)}
+                  maxLength={10}
+                />
+              </View>
 
-            <Text style={styles.label}>Prioridade</Text>
-            <View style={styles.priorityRow}>
-              {[1, 2, 3, 4, 5].map((value) => (
-                <TouchableOpacity
-                  key={value}
-                  style={[styles.priorityButton, prioridade === value && styles.priorityButtonActive]}
-                  onPress={() => setPrioridade(value)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.priorityText, prioridade === value && styles.priorityTextActive]}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+              <Text style={styles.label}>Categoria</Text>
+              <View style={styles.optionGrid}>
+                {categorias.length ? (
+                  categorias.map((categoria) => (
+                    <TouchableOpacity
+                      key={categoria.id}
+                      style={[styles.optionButton, categoriaId === categoria.id && styles.optionButtonActive]}
+                      onPress={() => setCategoriaId(categoria.id)}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={[styles.optionText, categoriaId === categoria.id && styles.optionTextActive]}>
+                        {categoria.nome}
+                      </Text>
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <Text style={styles.helperText}>Cadastre uma categoria antes de criar tarefas.</Text>
+                )}
+              </View>
 
-            <Text style={styles.label}>Fornecedor</Text>
-            <View style={styles.optionGrid}>
-              {fornecedoresMock.map((fornecedor) => (
-                <TouchableOpacity
-                  key={fornecedor.id}
-                  style={[styles.optionButton, fornecedorId === fornecedor.id && styles.optionButtonActive]}
-                  onPress={() => setFornecedorId(fornecedor.id)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.optionText, fornecedorId === fornecedor.id && styles.optionTextActive]}>
-                    {fornecedor.nome}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </SectionCard>
+              <Text style={styles.label}>Prioridade</Text>
+              <View style={styles.priorityRow}>
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <TouchableOpacity
+                    key={value}
+                    style={[styles.priorityButton, prioridade === value && styles.priorityButtonActive]}
+                    onPress={() => setPrioridade(value)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={[styles.priorityText, prioridade === value && styles.priorityTextActive]}>
+                      {value}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <Text style={styles.label}>Fornecedores</Text>
+              <View style={styles.optionGrid}>
+                {fornecedores.length ? (
+                  fornecedores.map((fornecedor) => {
+                    const selected = fornecedorIds.includes(fornecedor.id);
+
+                    return (
+                      <TouchableOpacity
+                        key={fornecedor.id}
+                        style={[styles.optionButton, selected && styles.optionButtonActive]}
+                        onPress={() => toggleFornecedor(fornecedor.id)}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[styles.optionText, selected && styles.optionTextActive]}>
+                          {fornecedor.nome}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })
+                ) : (
+                  <Text style={styles.helperText}>Nenhum fornecedor cadastrado.</Text>
+                )}
+              </View>
+
+              {isEditing && (
+                <>
+                  <Text style={styles.label}>Status</Text>
+                  <TouchableOpacity
+                    style={[styles.optionButton, form.concluida && styles.optionButtonActive]}
+                    onPress={() => updateField('concluida', !form.concluida)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={[styles.optionText, form.concluida && styles.optionTextActive]}>
+                      {form.concluida ? 'Tarefa concluida' : 'Tarefa aberta'}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </SectionCard>
+          )}
 
           <View style={styles.actions}>
             <TouchableOpacity
@@ -127,8 +301,17 @@ export default function FormularioTarefa({ navigation, route, theme }) {
               <Text style={styles.secondaryButtonText}>Cancelar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.primaryButton} activeOpacity={0.8}>
-              <FontAwesome name="check" size={14} color="#FFFFFF" />
+            <TouchableOpacity
+              style={[styles.primaryButton, (saving || loading) && styles.disabledButton]}
+              onPress={salvarTarefa}
+              activeOpacity={0.8}
+              disabled={saving || loading}
+            >
+              {saving ? (
+                <ActivityIndicator color="#FFFFFF" size="small" />
+              ) : (
+                <FontAwesome name="check" size={14} color="#FFFFFF" />
+              )}
               <Text style={styles.primaryButtonText}>Salvar</Text>
             </TouchableOpacity>
           </View>
