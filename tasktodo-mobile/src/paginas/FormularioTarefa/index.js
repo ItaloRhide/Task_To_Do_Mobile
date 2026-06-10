@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -11,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -24,6 +26,7 @@ const initialForm = {
   descricao: '',
   dataVencimento: '',
   concluida: false,
+  imagem: '',
 };
 
 function formatDateToIso(date) {
@@ -87,6 +90,7 @@ export default function FormularioTarefa({ navigation, route, theme }) {
           descricao: task.descricao || '',
           dataVencimento: task.dataVencimento || '',
           concluida: Boolean(task.concluida),
+          imagem: task.imagem || '',
         });
         setPrioridade(task.prioridade || 3);
         setCategoriaId(task.categoria?.id || categoriasData[0]?.id || null);
@@ -122,6 +126,41 @@ export default function FormularioTarefa({ navigation, route, theme }) {
     });
   }
 
+  async function selecionarImagem() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 0.5,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      updateField('imagem', `data:image/jpeg;base64,${result.assets[0].base64}`);
+    }
+  }
+
+  async function tirarFoto() {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permissao negada', 'Precisamos da permissao da camera para tirar fotos.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      quality: 0.5,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      updateField('imagem', `data:image/jpeg;base64,${result.assets[0].base64}`);
+    }
+  }
+
+  function removerImagem() {
+    updateField('imagem', '');
+  }
+
   async function salvarTarefa() {
     const payload = {
       titulo: form.titulo.trim(),
@@ -129,6 +168,7 @@ export default function FormularioTarefa({ navigation, route, theme }) {
       dataVencimento: form.dataVencimento.trim(),
       prioridade,
       concluida: form.concluida,
+      imagem: form.imagem || null,
       categoria: categoriaId ? { id: categoriaId } : null,
       fornecedores: fornecedorIds.map((id) => ({ id })),
     };
@@ -279,6 +319,27 @@ export default function FormularioTarefa({ navigation, route, theme }) {
                   </TouchableOpacity>
                 ))}
               </View>
+
+              <Text style={styles.label}>Foto</Text>
+              {form.imagem ? (
+                <View style={styles.imagePreviewBox}>
+                  <Image source={{ uri: form.imagem }} style={styles.imagePreview} />
+                  <TouchableOpacity style={styles.imageRemoveButton} onPress={removerImagem} activeOpacity={0.8}>
+                    <FontAwesome name="times" size={14} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.imageActionsRow}>
+                  <TouchableOpacity style={styles.imageButton} onPress={selecionarImagem} activeOpacity={0.8}>
+                    <FontAwesome name="image" size={14} color={theme.colors.primary} />
+                    <Text style={styles.imageButtonText}>Galeria</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.imageButton} onPress={tirarFoto} activeOpacity={0.8}>
+                    <FontAwesome name="camera" size={14} color={theme.colors.primary} />
+                    <Text style={styles.imageButtonText}>Camera</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
 
               <Text style={styles.label}>Fornecedores</Text>
               <View style={styles.optionGrid}>

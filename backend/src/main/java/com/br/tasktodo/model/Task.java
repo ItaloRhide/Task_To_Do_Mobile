@@ -57,6 +57,10 @@ public class Task {
     )
     private Set<Fornecedor> fornecedores;
 
+    @Lob
+    @Column(name = "imagem")
+    private String imagem;
+
     // Construtores
     public Task() {
         this.dataCriacao = LocalDateTime.now();
@@ -155,6 +159,14 @@ public class Task {
 
     public void setFornecedores(Set<Fornecedor> fornecedores) {
         this.fornecedores = fornecedores;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     @Override

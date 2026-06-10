@@ -179,6 +179,12 @@ export default function createStyles(theme) {
       textTransform: 'uppercase',
       letterSpacing: 0.5,
     },
+    taskImage: {
+      width: '100%',
+      height: 120,
+      borderRadius: 8,
+      marginBottom: 8,
+    },
     emptyBox: {
       alignItems: 'center',
       paddingVertical: 48,

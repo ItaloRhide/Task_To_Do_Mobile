@@ -15,6 +15,7 @@ public class TaskDTO {
     private LocalDateTime dataAtualizacao;
     private CategoryDTO categoria;
     private Set<FornecedorDTO> fornecedores;
+    private String imagem;
 
     // Getters e Setters
     public Long getId() {
@@ -95,5 +96,13 @@ public class TaskDTO {
 
     public void setFornecedores(Set<FornecedorDTO> fornecedores) {
         this.fornecedores = fornecedores;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

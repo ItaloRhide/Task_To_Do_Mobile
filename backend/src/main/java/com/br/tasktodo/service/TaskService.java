@@ -82,6 +82,7 @@ public class TaskService {
         taskExistente.setDataVencimento(taskAtualizada.getDataVencimento());
         taskExistente.setPrioridade(taskAtualizada.getPrioridade());
         taskExistente.setConcluida(taskAtualizada.getConcluida());
+        taskExistente.setImagem(taskAtualizada.getImagem());
         taskExistente.setDataAtualizacao(LocalDateTime.now());
         
         Task updatedTask = taskRepository.save(taskExistente);
@@ -194,6 +195,7 @@ public class TaskService {
         dto.setPrioridade(task.getPrioridade());
         dto.setDataCriacao(task.getDataCriacao());
         dto.setDataAtualizacao(task.getDataAtualizacao());
+        dto.setImagem(task.getImagem());
         
         if (task.getCategoria() != null) {
             CategoryDTO catDto = new CategoryDTO();

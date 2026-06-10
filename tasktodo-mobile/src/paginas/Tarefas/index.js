@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   SafeAreaView,
   Text,
   TextInput,
@@ -206,7 +207,10 @@ export default function Tarefas({ navigation, theme }) {
               )}
             </View>
           }
-          renderItem={({ item }) => (
+          renderItem={({ item }) => {
+            const hasImage = item.imagem && item.imagem.startsWith('data:image');
+
+            return (
             <SectionCard
               theme={theme}
               title={item.titulo}
@@ -219,6 +223,10 @@ export default function Tarefas({ navigation, theme }) {
                 </View>
               }
             >
+              {hasImage && (
+                <Image source={{ uri: item.imagem }} style={styles.taskImage} resizeMode="cover" />
+              )}
+
               <View style={styles.metaRow}>
                 <Text style={styles.metaText}>Vence: {item.dataVencimento}</Text>
                 <Text style={styles.metaText}>Prioridade: {prioridadeLabel(item.prioridade)}</Text>
@@ -262,7 +270,8 @@ export default function Tarefas({ navigation, theme }) {
                 </TouchableOpacity>
               </View>
             </SectionCard>
-          )}
+          );
+        }}
         />
       </View>
 
