@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="tasktodo-mobile/assets/logo.png" alt="Task To Do" width="140" />
+  <img src="tasktodo-mobile/assets/logo.png" alt="Task To Do" width="200" />
 
   <h1>📋 Task To Do</h1>
   <p>Gerenciamento de tarefas, categorias e fornecedores</p>
@@ -98,16 +98,21 @@ O projeto é dividido em duas partes principais:
 
 ### Task
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | Long | Identificador único |
-| `titulo` | String | Título da tarefa |
-| `descricao` | String | Descrição detalhada |
-| `dataVencimento` | LocalDate | Data de vencimento |
-| `concluida` | Boolean | Status de conclusão |
-| `prioridade` | Integer | Nível de prioridade |
-| `categoria` | Category | Categoria vinculada |
-| `fornecedores` | Set<Fornecedor> | Fornecedores vinculados |
+> ✅ **Requisito atendido:** A entidade `Task` possui **11 atributos** (mínimo exigido: 5), contemplando todos os tipos obrigatórios — **literal** (String), **numérico** (Long/Integer), **data** (LocalDate/LocalDateTime) e **boolean** (Boolean).
+
+| Campo | Tipo | Categoria | Descrição |
+|---|---|---|---|
+| `id` | Long | Numérico | Identificador único |
+| `titulo` | String | Literal | Título da tarefa |
+| `descricao` | String | Literal | Descrição detalhada |
+| `dataVencimento` | LocalDate | **Data** | Data de vencimento |
+| `concluida` | Boolean | **Boolean** | Status de conclusão |
+| `prioridade` | Integer | Numérico | Nível de prioridade |
+| `dataCriacao` | LocalDateTime | Data | Data de criação |
+| `dataAtualizacao` | LocalDateTime | Data | Data da última atualização |
+| `categoria` | Category | Relacionamento | Categoria vinculada |
+| `fornecedores` | Set\<Fornecedor\> | Relacionamento | Fornecedores vinculados |
+| `imagem` | String | Literal | Imagem da tarefa (base64) |
 
 ### Category
 
@@ -124,6 +129,11 @@ O projeto é dividido em duas partes principais:
 | `id` | Long | Identificador único |
 | `nome` | String | Nome do fornecedor |
 | `cnpj` | String | CNPJ (14 dígitos) |
+| `logradouro` | String | Logradouro do endereço |
+| `bairro` | String | Bairro |
+| `cidade` | String | Cidade |
+| `uf` | String | UF (2 caracteres) |
+| `cep` | String | CEP (8 dígitos) |
 
 ---
 
@@ -166,9 +176,29 @@ Base: `http://localhost:8080/api`
 |---|---|---|
 | `GET` | `/fornecedores` | Lista todos |
 | `GET` | `/fornecedores/{id}` | Busca por ID |
+| `GET` | `/fornecedores/consulta-cnpj/{cnpj}` | Consulta dados na Brasil API |
 | `POST` | `/fornecedores` | Cria novo |
 | `PUT` | `/fornecedores/{id}` | Atualiza |
 | `DELETE` | `/fornecedores/{id}` | Remove |
+
+### Autenticação
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/auth/login` | Login (retorna token JWT) |
+| `GET` | `/auth/check` | Verifica se token é válido |
+
+---
+
+## 👤 Usuários padrão
+
+Ao iniciar o backend, **3 usuários são criados automaticamente** (senha comum: `123456`):
+
+| Email | Nome |
+|---|---|
+| `admin@tasktodo.com` | Administrador |
+| `joao@email.com` | João Silva |
+| `maria@email.com` | Maria Souza |
 
 ---
 
@@ -214,6 +244,22 @@ Para usar uma porta específica:
 ```powershell
 npx expo start --port 8082 --clear
 ```
+
+---
+
+## 📱 Telas do aplicativo
+
+O app mobile possui **5 telas**:
+
+| Tela | Descrição |
+|---|---|
+| **Login** | Autenticação com email/senha. Alternador de tema claro/escuro. |
+| **Tarefas** | Lista principal com busca, filtros (Todas/Pendentes/Concluídas), ações de concluir/editar/excluir e estatísticas. |
+| **Formulário de Tarefa** | Criação/edição de tarefa com campos: título, descrição, data, categoria, prioridade (1-5), foto (galeria/câmera) e fornecedores. |
+| **Categorias** | CRUD completo com lista e contagem de tarefas por categoria. |
+| **Fornecedores** | CRUD completo com consulta automática de CNPJ (Brasil API) e CEP (ViaCEP). |
+
+A navegação entre as telas principais (Tarefas, Categorias, Fornecedores) é feita via **QuickNav**, uma barra de navegação rápida no topo.
 
 ---
 
